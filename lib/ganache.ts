@@ -1,9 +1,8 @@
-import path from "path";
-import fs from "fs/promises";
-import Ganache, { EthereumProvider } from "ganache";
-import { EthereumProviderOptions } from "@ganache/ethereum-options";
-import redis from "./redis";
-import { fstat } from "fs";
+import path from "path"
+import fs from "fs/promises"
+import Ganache, { EthereumProvider } from "ganache"
+import { EthereumProviderOptions } from "@ganache/ethereum-options"
+import redis from "./redis"
 
 type Providers = { [forkId: string]: EthereumProvider }
 
@@ -23,52 +22,52 @@ class Simulator {
       database: {
         dbPath: path.join(process.cwd(), "/data", forkId),
       },
-    };
+    }
 
-    return Ganache.provider(options);
+    return Ganache.provider(options)
   }
 
   async create(seed: string, forkId: string): Promise<EthereumProvider> {
-    const provider = this.init(seed, forkId);
-    const status = await redis.set(forkId, seed);
-    this.providers[forkId] = provider;
-    return provider;
+    const provider = this.init(seed, forkId)
+    const status = await redis.set(forkId, seed)
+    this.providers[forkId] = provider
+    return provider
   }
 
   async get(forkId: string): Promise<EthereumProvider | null> {
     if (this.providers[forkId]) {
-      return this.providers[forkId];
+      return this.providers[forkId]
     }
 
-    const seed = await redis.get(forkId);
+    const seed = await redis.get(forkId)
     if (seed) {
-      const provider = this.init(seed, forkId);
-      this.providers[forkId] = provider;
-      return provider;
+      const provider = this.init(seed, forkId)
+      this.providers[forkId] = provider
+      return provider
     }
 
     return null
   }
 
   async remove(forkId: string): Promise<undefined> {
-    await redis.del(forkId);
-    delete this.providers[forkId];
+    await redis.del(forkId)
+    delete this.providers[forkId]
     await fs.rm(
       path.join(process.cwd(), "/data", forkId),
       { recursive: true, force: true }
     )
-    return;
+    return
   }
 }
 
-let simulator: Simulator;
+let simulator: Simulator
 
 if (!global._simulator) {
-  global._simulator = new Simulator();
+  global._simulator = new Simulator()
 }
 
 
-simulator = global._simulator;
+simulator = global._simulator
 
-export default simulator;
-export { Simulator };
+export default simulator
+export { Simulator }

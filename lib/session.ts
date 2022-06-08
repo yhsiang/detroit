@@ -1,4 +1,4 @@
-import type { IronSessionOptions } from "iron-session";
+import type { IronSessionOptions } from "iron-session"
 
 export const sessionOptions: IronSessionOptions = {
   password: process.env.SECRET_COOKIE_PASSWORD as string,
@@ -6,10 +6,10 @@ export const sessionOptions: IronSessionOptions = {
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
   },
-};
+}
 
 declare module "iron-session" {
-    interface IronSessionData {
-      forkId?: string;
-    }
+  interface IronSessionData {
+    forkId?: string;
+  }
 }

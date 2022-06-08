@@ -1,6 +1,6 @@
-import { Simulator } from "../libs/ganache";
+import { Simulator } from "../libs/ganache"
 
 declare global {
-  var _simulator: Simulator    
+  var _simulator: Simulator
 }
-export {};
+export { }

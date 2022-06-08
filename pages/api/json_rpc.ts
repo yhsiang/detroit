@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { withIronSessionApiRoute } from "iron-session/next";
+import { withIronSessionApiRoute } from "iron-session/next"
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { sessionOptions } from "lib/session";
-import simulator from "lib/ganache";
+import { sessionOptions } from "lib/session"
+import simulator from "lib/ganache"
 
 
 export default withIronSessionApiRoute(async function handler(
@@ -11,9 +11,13 @@ export default withIronSessionApiRoute(async function handler(
 ) {
 
   if (req.session.forkId) {
-    const provider = await simulator.get(req.session.forkId);
-    const result = await provider?.request(req.body);
+    const provider = await simulator.get(req.session.forkId)
+    const result = await provider?.request(req.body)
 
     res.status(200).json(result)
+  } else {
+    res.status(200).json({
+      message: "please fork first"
+    })
   }
 }, sessionOptions)
