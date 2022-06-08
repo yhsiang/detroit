@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  version: '0.1'
+  title: 'Detroit API'
+  description: |
+    # Detroit API Overview
+    Work in progess...
+    
+  termsOfService: ""
+  contact:
+    name: LY Cheng
+    url: 
+    email: lyforever62@hotmail.com
+  license:
+    name: MIT License
+    url: https://github.com/yhsiang/detroit/LICENSE
+
+servers:
+  - url: 'localhost:3000'
+    description: Detroit API
+
+paths:
+  /fork:
+    get:
+      summary: Fork
+      description: 'Fork a new simulation environment with current block height.'
+      responses:
+        '200':
+          description: 'Request succeeded'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForkResponse'
+  /json_rpc:
+    get: 
+      summary: Call Ethereum JSON-RPC
+      description: 'Call Ethereum JSON-RPC'
+      requestBody:
+        description: 'Ethereum JSON-RPC'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonPRCRequest'
+      responses:
+        '200':
+          description: 'Request succeeded'
+  /unfork:
+    get:
+      summary: Remove simulation environment
+      description: 'Remove simulation environment'
+      responses:
+        '200':
+          description: 'Request succeeded'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+      
+components:
+  schemas:
+    ForkResponse:
+      type: object
+      required:
+        - amount
+        - address
+        - signature
+      properties:
+        amount:
+          type: string
+          description: Amount of token to mint
+        address:
+          type: string
+          description: Address of minter
+        signature:
+          type: string
+    JsonPRCRequest:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          description: Method
+        params:
+          type: array
+          description: Parameters
+    Success:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: succeeded message
