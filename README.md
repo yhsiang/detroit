@@ -18,10 +18,12 @@ yarn install
 
 ## Environment Variables
 
+```shell
 CHAIN_URL=""
 REDIS_HOST=""
 REDIS_PORT=""
 SECRET_COOKIE_PASSWORD=""
+```
 
 ## Development
 
