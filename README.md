@@ -13,15 +13,19 @@ Project name is inspired by [Detroit: Become Human](https://en.wikipedia.org/wik
 * install dependencies
 
 ```bash
-yarn install
+npm install
+# or
+pnpm install
 ```
 
 ## Environment Variables
 
 ```shell
+# archive node url
 CHAIN_URL=""
 REDIS_HOST=""
 REDIS_PORT=""
+# 32-length password for session
 SECRET_COOKIE_PASSWORD=""
 ```
 
@@ -32,5 +36,5 @@ First, run the development server:
 ```bash
 npm run dev
 # or
-yarn dev
+pnpm dev
 ```
