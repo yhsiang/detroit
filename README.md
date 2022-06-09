@@ -19,8 +19,11 @@ pnpm install
 ## Environment Variables
 
 ```shell
-# archive node url
+# Provide one url of archive node.
+# Recommend to apply alchemyapi (https://www.alchemy.com/).
+# ex: https://eth-mainnet.alchemyapi.io/v2/<YOUR_API_KEY>
 CHAIN_URL=""
+# Recommend to apply Redis Enterprise Cloud (https://redis.com/redis-enterprise-cloud/overview/).
 REDIS_HOST=""
 REDIS_PORT=""
 REDIS_PASSWORD=""
