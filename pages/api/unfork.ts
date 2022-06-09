@@ -11,8 +11,10 @@ type Response = {
 
 export default withIronSessionApiRoute(
     async (req, res: NextApiResponse<Response>) => {
-        await simulator.remove(req.session.forkId as string)
-        req.session.destroy()
+        if (req.session.forkId) {
+            await simulator.remove(req.session.forkId as string)
+            req.session.destroy()
+        }
         res.json({ message: "success" })
     },
     sessionOptions,

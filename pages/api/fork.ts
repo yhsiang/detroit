@@ -7,9 +7,6 @@ import simulator from "lib/ganache"
 
 export default withIronSessionApiRoute(async (req, res) => {
   const forkId = uuid()
-  req.session.forkId = forkId
-  await req.session.save()
-
   const provider = await simulator.create("2", forkId)
   const accounts = await provider.request({
     method: "eth_accounts",
@@ -21,8 +18,14 @@ export default withIronSessionApiRoute(async (req, res) => {
     params: [],
   })
 
+  const address = accounts[0]
+  req.session.address = address
+  req.session.forkId = forkId
+  await req.session.save()
+
   res.status(200).json({
-    address: accounts[0],
+    forkId,
+    address,
     blockNumber,
   })
 

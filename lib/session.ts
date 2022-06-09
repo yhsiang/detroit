@@ -10,6 +10,7 @@ export const sessionOptions: IronSessionOptions = {
 
 declare module "iron-session" {
   interface IronSessionData {
-    forkId?: string;
+    forkId?: string
+    address?: string
   }
 }
