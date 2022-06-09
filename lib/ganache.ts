@@ -8,8 +8,10 @@ type Providers = { [forkId: string]: EthereumProvider }
 
 class Simulator {
   providers: Providers = {}
+  dbDir: string = path.join(process.cwd(), "/data")
 
-  init(seed: string, forkId: string): EthereumProvider {
+  async init(seed: string, forkId: string): Promise<EthereumProvider> {
+    await this.initDir()
     const options: EthereumProviderOptions = {
       wallet: {
         totalAccounts: 1,
@@ -20,15 +22,24 @@ class Simulator {
         url: process.env.CHAIN_URL
       },
       database: {
-        dbPath: path.join(process.cwd(), "/data", forkId),
+        dbPath: path.join(this.dbDir, forkId),
       },
     }
 
     return Ganache.provider(options)
   }
 
+  async initDir(): Promise<undefined> {
+    try {
+      await fs.access(this.dbDir)
+    } catch (err) {
+      fs.mkdir(this.dbDir)
+    }
+    return
+  }
+
   async create(seed: string, forkId: string): Promise<EthereumProvider> {
-    const provider = this.init(seed, forkId)
+    const provider = await this.init(seed, forkId)
     const status = await redis.set(forkId, seed)
     this.providers[forkId] = provider
     return provider
@@ -41,7 +52,7 @@ class Simulator {
 
     const seed = await redis.get(forkId)
     if (seed) {
-      const provider = this.init(seed, forkId)
+      const provider = await this.init(seed, forkId)
       this.providers[forkId] = provider
       return provider
     }
