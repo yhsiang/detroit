@@ -6,9 +6,12 @@ import redis from "./redis"
 
 type Providers = { [forkId: string]: EthereumProvider }
 
+const dbDir = process.env.NODE_ENV === "production"
+  ? "/tmp/data"
+  : path.join(process.cwd(), "/data")
+
 class Simulator {
   providers: Providers = {}
-  dbDir: string = path.join(process.cwd(), "/data")
 
   async init(seed: string, forkId: string): Promise<EthereumProvider> {
     await this.initDir()
@@ -22,7 +25,7 @@ class Simulator {
         url: process.env.CHAIN_URL
       },
       database: {
-        dbPath: path.join(this.dbDir, forkId),
+        dbPath: path.join(dbDir, forkId),
       },
     }
 
@@ -31,9 +34,9 @@ class Simulator {
 
   async initDir(): Promise<undefined> {
     try {
-      await fs.access(this.dbDir)
+      await fs.access(dbDir)
     } catch (err) {
-      fs.mkdir(this.dbDir)
+      fs.mkdir(dbDir)
     }
     return
   }
