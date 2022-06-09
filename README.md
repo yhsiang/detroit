@@ -25,6 +25,8 @@ pnpm install
 CHAIN_URL=""
 REDIS_HOST=""
 REDIS_PORT=""
+REDIS_PASSWORD=""
+REDIS_USERNAME=""
 # 32-length password for session
 SECRET_COOKIE_PASSWORD=""
 ```
