@@ -41,10 +41,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JsonPRCRequest'
+              $ref: '#/components/schemas/JsonRpcRequest'
       responses:
         '200':
           description: 'Request succeeded'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcResponse'
   /unfork:
     get:
       summary: Remove simulation environment
@@ -74,9 +78,11 @@ components:
           description: Address of minter
         signature:
           type: string
-    JsonPRCRequest:
+    JsonRpcRequest:
       type: object
       required:
+        - jsonrpc
+        - id
         - method
         - params
       properties:
@@ -86,6 +92,22 @@ components:
         params:
           type: array
           description: Parameters
+    JsonRpcResponse:
+      type: object
+      required:
+        - jsonrpc
+        - id
+        - result
+        properties:
+          jsonrpc:
+            type: string
+            description: Version of Json Rpc
+          id:
+            type: number
+            description: Id of Json Rpc
+          result:
+            type: string
+            description: Result of Json Rpc
     Success:
       type: object
       required:

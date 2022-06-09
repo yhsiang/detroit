@@ -9,15 +9,24 @@ export default withIronSessionApiRoute(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-
+  const { jsonrpc, id } = req.body
   if (req.session.forkId) {
     const provider = await simulator.get(req.session.forkId)
     const result = await provider?.request(req.body)
 
-    res.status(200).json(result)
+    res.status(200).json({
+      jsonrpc,
+      result,
+      id,
+    })
   } else {
     res.status(200).json({
-      message: "please fork first"
+      id: 0,
+      jsonrpc,
+      error: {
+        code: -32701,
+        message: "please fork first",
+      }
     })
   }
 }, sessionOptions)
