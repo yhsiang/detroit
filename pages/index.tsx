@@ -45,6 +45,7 @@ const Home = ({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
+        <div className={styles.title}>Simple demo for Detroit Simulation Provider</div>
         {
           !forkIdState ?
             <button
@@ -61,7 +62,7 @@ const Home = ({
         {
           forkIdState ?
             <div className={styles.demo}>
-              <div style={{ marginBottom: "20px" }}>Example</div>
+              <div style={{ marginBottom: "20px" }}>Example: send a transaction</div>
               <button
                 className={styles.button}
                 onClick={send}
