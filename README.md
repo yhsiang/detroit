@@ -13,8 +13,6 @@ Project name is inspired by [Detroit: Become Human](https://en.wikipedia.org/wik
 * install dependencies
 
 ```bash
-npm install
-# or
 pnpm install
 ```
 
@@ -36,7 +34,5 @@ SECRET_COOKIE_PASSWORD=""
 First, run the development server:
 
 ```bash
-npm run dev
-# or
 pnpm dev
 ```
