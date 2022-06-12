@@ -116,7 +116,11 @@ components:
           type: number
           description: Id of Json Rpc
         result:
-          type: any
+          oneOf: 
+            - type: string
+            - type: number
+            - type: object
+            - type: array
           description: Result of Json Rpc
     UnforkRequest:
       type: object
