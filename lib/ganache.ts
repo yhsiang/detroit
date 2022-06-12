@@ -43,7 +43,7 @@ class Simulator {
 
   async create(seed: string, forkId: string): Promise<EthereumProvider> {
     const provider = await this.init(seed, forkId)
-    const status = await redis.set(forkId, seed)
+    await redis.set(forkId, seed)
     this.providers[forkId] = provider
     return provider
   }
@@ -64,12 +64,12 @@ class Simulator {
   }
 
   async remove(forkId: string): Promise<undefined> {
-    await redis.del(forkId)
-    delete this.providers[forkId]
     await fs.rm(
-      path.join(process.cwd(), "/data", forkId),
+      path.join(dbDir, forkId),
       { recursive: true, force: true }
     )
+    await redis.del(forkId)
+    delete this.providers[forkId]
     return
   }
 }
@@ -79,7 +79,6 @@ let simulator: Simulator
 if (!global._simulator) {
   global._simulator = new Simulator()
 }
-
 
 simulator = global._simulator
 

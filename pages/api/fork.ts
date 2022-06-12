@@ -1,11 +1,11 @@
 import { v4 as uuid } from "uuid"
-import { withIronSessionApiRoute } from "iron-session/next"
-import { sessionOptions } from "lib/session"
 import simulator from "lib/ganache"
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-
-
-export default withIronSessionApiRoute(async (req, res) => {
+export default async function (
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) {
   const forkId = uuid()
   const provider = await simulator.create("2", forkId)
   const accounts = await provider.request({
@@ -18,15 +18,9 @@ export default withIronSessionApiRoute(async (req, res) => {
     params: [],
   })
 
-  const address = accounts[0]
-  req.session.address = address
-  req.session.forkId = forkId
-  await req.session.save()
-
   res.status(200).json({
     forkId,
-    address,
+    address: accounts[0],
     blockNumber,
   })
-
-}, sessionOptions)
+}

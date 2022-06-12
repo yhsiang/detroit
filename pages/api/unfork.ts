@@ -1,21 +1,19 @@
-import { v4 as uuid } from "uuid"
-import { NextApiResponse } from "next"
-import { withIronSessionApiRoute } from "iron-session/next"
-import { sessionOptions } from "lib/session"
 import simulator from "lib/ganache"
+import { NextApiRequest, NextApiResponse } from "next"
 
 type Response = {
-    message: string
+  message: string
 }
 
-
-export default withIronSessionApiRoute(
-    async (req, res: NextApiResponse<Response>) => {
-        if (req.session.forkId) {
-            await simulator.remove(req.session.forkId as string)
-            req.session.destroy()
-        }
-        res.json({ message: "success" })
-    },
-    sessionOptions,
-)
+export default async function (
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) {
+  const { forkId } = req.body
+  if (forkId) {
+    await simulator.remove(forkId as string)
+    res.json({ message: "success" })
+  } else {
+    res.json({ message: "forkId is empty" })
+  }
+}
