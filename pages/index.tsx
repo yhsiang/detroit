@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import styles from "../styles/Home.module.css"
 import { ethers } from "ethers"
+import styles from "../styles/Home.module.css"
 
 const Home = () => {
   const [forkId, setForkId] = useState("")
