@@ -1,94 +1,102 @@
 import { useEffect, useState } from "react"
-import { ethers } from "ethers"
-import styles from "../styles/Home.module.css"
+// import { ethers } from "ethers"
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Link,
+  Button,
+} from "@chakra-ui/react"
+import { TxItem } from "componets"
+import Api from "lib/api"
 
 const Home = () => {
   const [forkId, setForkId] = useState("")
-  const [address, setAddress] = useState("")
-  const [blockNumber, setBlockNumber] = useState(0)
-  const [disabled, setDisabled] = useState(false)
-  const [tx, setTx] = useState({})
+  const [txs, setTxs] = useState([])
 
   useEffect(() => {
-    const forkId = localStorage.getItem('forkId')
-    if (forkId) {
-      setForkId(forkId as string)
+    if (typeof window !== undefined) {
+      const params = new URLSearchParams(window.location.search)
+      const forkId = params.get("forkId") as string
+      if (!forkId) return
+
+      setForkId(forkId)
+      const api = new Api(forkId)
+      api.getData()
     }
-  }, [forkId])
+  }, [])
 
   const fork = async () => {
-    setDisabled(true)
     const response = await fetch("/api/fork")
-    const { forkId, address, blockNumber } = await response.json()
-    localStorage.setItem('forkId', forkId)
+    const { forkId } = await response.json()
     setForkId(forkId)
-    setAddress(address)
-    setBlockNumber(blockNumber)
-    setDisabled(false)
+    location.replace("/?forkId=" + forkId)
   }
 
-  const unfork = async () => {
-    const data = { forkId }
-    await fetch("/api/unfork", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data),
-    })
-
-    localStorage.removeItem('forkId')
-
-    setForkId("")
-    setAddress("")
-    setBlockNumber(0)
-  }
-
-  const send = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(`/api/${forkId}`)
-    const signer = provider.getSigner()
-    const tx = await signer.sendTransaction({
-      to: "0xf19654B1B9b8f4cfdf28ccB8e9049CA859baA7D9",
-      value: ethers.utils.parseEther("1.0")
-    })
-    setTx(tx)
-  }
+  const content = !forkId ? (
+    <Box padding={2}>
+      <Text>Detroit is an Ethereum Simulation Provider.</Text>
+      <Text>Please fork to have a copy state of Ethereum blockchains.</Text>
+      <Button marginTop={2} onClick={fork}>Fork</Button>
+    </Box>
+  ) : (
+    <>
+      <Heading
+        size="lg"
+        borderColor="black"
+        paddingY={3}
+        borderTop={0}
+        borderLeft={0}
+        borderRight={0}
+        borderWidth={1}
+        paddingX={2}
+      >Latest Transactions</Heading>
+      <Box flex={1}>
+        <TxItem />
+      </Box>
+    </>
+  )
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.title}>Simple demo for Detroit Simulation Provider</div>
-        {
-          !forkId ?
-            <button
-              className={styles.button}
-              onClick={fork}
-              disabled={disabled}
-            >Fork</button>
-            : <button
-              className={styles.button}
-              onClick={unfork}>Unfork</button>
-        }
-      </div>
-      <div className={styles.content}>
-        {
-          forkId ?
-            <div className={styles.demo}>
-              <div style={{ marginBottom: "20px" }}>Example: send a transaction</div>
-              <button
-                className={styles.button}
-                onClick={send}
-              >Send a transaction</button>
-              <div style={{ marginTop: "20px" }}>TX Result</div>
-              <div style={{ marginTop: "20px" }}>
-                {tx ? <pre>{JSON.stringify(tx, null, 2)}</pre> : null}
-              </div>
-            </div>
-            : <div>Please fork first</div>
-        }
-      </div>
-
-    </div>
+    <Flex
+      display="flex"
+      flexDirection="column"
+      position="absolute"
+      width="100%"
+      height="100vh"
+    >
+      {/* header */}
+      <Box height={16}>
+        <Flex flexDirection="row" flex={1}>
+          <Box marginX={4} marginY={4} >
+            <Heading size="xl">Detroitscan</Heading>
+          </Box>
+          <Text alignSelf="center">{forkId}</Text>
+          <Box marginLeft="auto" alignSelf="center" marginRight={4}>
+            <Link href="https://github.com/yhsiang/detroit">Github</Link>
+          </Box>
+        </Flex>
+      </Box>
+      {/* content */}
+      <Flex
+        display="flex"
+        flexDirection="column"
+        height="100%"
+        marginX={4}
+        marginY={4}
+        borderColor="black"
+        borderWidth={1}
+      >
+        {content}
+      </Flex >
+      {/* footer */}
+      < Box height={16} >
+        <Box marginX={4} marginY={4} >
+          <Text>Detroitscan @ 2022</Text>
+        </Box>
+      </Box >
+    </Flex >
   )
 }
 

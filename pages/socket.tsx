@@ -16,7 +16,7 @@ const SocketDemo: React.FC = () => {
   }, [socket])
 
   useEffect((): any => {
-    const localForkId = localStorage.getItem('forkId')
+    const localForkId = localStorage.getItem("forkId")
     if (localForkId) {
       setForkId(localForkId as string)
       const socket = io("http://localhost:3000", {

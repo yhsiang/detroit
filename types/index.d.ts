@@ -10,7 +10,19 @@ declare global {
 export type NextApiResponseServerIO = NextApiResponse & {
   socket: Socket & {
     server: NetServer & {
-      io: SocketIOServer;
-    };
-  };
-};
+      io: SocketIOServer
+    }
+  }
+}
+
+export type Provider = {
+  provider: EthereumProvider,
+  wss: WebSocketServer
+}
+
+export type JsonRpcRequest = {
+  id: number
+  jsonrpc: string
+  method: string
+  params: any[]
+}
